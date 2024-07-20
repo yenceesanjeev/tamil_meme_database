@@ -1,0 +1,54 @@
+### Data
+
+**User**
+
+- Name :: str
+- Profile Pic : URL S3
+- Email : email
+
+**Template**
+
+- Movie : Ref
+- Actor : Ref
+- Emotion : Ref
+- Popularity : Enum (1-5)
+- Dialogue : String
+- Category : Ref
+- User Uploaded : Ref
+- Description : Str
+- Image : URL S3
+
+**Category**
+
+- id
+- name
+
+**Movie**
+
+- id
+- name
+
+**Actor**
+
+- id
+- name
+- language
+
+### Actions
+
+**Search**
+
+- Input:
+    - Search term
+- Output
+    - List of meme templates
+
+**Filter**
+
+- input
+    - Actor
+    - Emotion
+    - Category
+    - Popular
+- Output
+    - List of meme templates

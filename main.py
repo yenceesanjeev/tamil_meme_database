@@ -1,75 +1,69 @@
 import csv
 from typing import Union
-from sqlalchemy import create_engine, Integer, String, Column
-from sqlalchemy.orm import sessionmaker # what is session maker
+from models import *
+from typing import Optional
 
 from fastapi import FastAPI
 
-#Why am I importing everything? 
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
-
-class User(Base):
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True) #Got the integer is not defined error. 
-    name = Column(String)
-    profile_pic = Column(String)
-    email = Column(String)
-
-    def __repr__(self):
-        return f"User(name='{self.name}', email='{self.email}')"
-
-# I understand this but not a lot
-engine = create_engine("sqlite://", echo=True)
-Base.metadata.create_all(engine)
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-with open('users.csv', 'r') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        # Create a User object from the CSV row
-        user = User(
-            name=row['name'],
-            profile_pic=row['profile_pic'],
-            email=row['email']
-        )
-
-        # Add the user to the session
-        session.add(user)
-
-# Commit the changes to the database
-session.commit()
-
-# Close the session
-session.close()
-
-# Reading the data
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# Query all users
-users = session.query(User).all()
-
-# Print the users
-for user in users:
-    print(f"Name: {user.name}, Email: {user.email}, Profile Pic: {user.profile_pic}")
-
-# Close the session
-session.close()
-
-
 app = FastAPI()
 
+def init_db():
+    Base.metadata.create_all(engine)
 
-@app.post("/")
+def write_users_from_file():
+    init_db()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    with open("users.csv", "r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            user = User(
+                name=row["name"],
+                profile_pic=row["profile_pic"],
+                email=row["email"]
+            )
+            session.add(user)
+        session.commit()
+    
+    session.close()
+
+def read_users_from_file():
+    init_db()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    users = session.query(User).all()
+
+    session.close()
+    return users
+
+write_users_from_file()
+print(read_users_from_file())
+
+@app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return read_users_from_file()
 
+#Sending the data over URL Params, how do I send as body?
+@app.post("/add_user")
+def add_user(name: str, email: str, profile_pic: Optional[str] = None):
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    try:
+        new_user = User(name=name, email=email, profile_pic=profile_pic)
+        session.add(new_user)
+        session.commit()
+        return {"message": "User added successfully", "user": new_user}
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        session.close()
+
+'''
+@app.get("/users")
+def get_users():
+    return get_user_list()
+'''
