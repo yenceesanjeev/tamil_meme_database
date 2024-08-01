@@ -16,7 +16,7 @@ const UserList = () => {
       try {
         const apiUrl =
           process.env.NODE_ENV === "production"
-            ? "https://your-production-api.com"
+            ? "https://tamil-meme-database.onrender.com"
             : "http://localhost:8000";
         console.log("API URL:", apiUrl); // Add this line for debugging
         const response = await fetch(`${apiUrl}/users`);
