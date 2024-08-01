@@ -16,6 +16,7 @@ const UserList = () => {
       try {
         const apiUrl =
           process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        console.log("API URL:", apiUrl); // Add this line for debugging
         const response = await fetch(`${apiUrl}/users`);
         const data = await response.json();
         setUsers(data);
