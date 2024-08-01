@@ -1,5 +1,9 @@
 from sqlalchemy import create_engine, Integer, String, Column, Enum, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 Base = declarative_base()
 
@@ -44,7 +48,7 @@ class Template(Base):
     movie_id = Column(Integer, ForeignKey('movies.id'), nullable=False)
     actor_id = Column(Integer, ForeignKey('actors.id'), nullable=False)
     emotion_id = Column(Integer, nullable=False)
-    popularity = Column(Enum('1', '2', '3', '4', '5'), nullable=False)
+    popularity = Column(Enum('1', '2', '3', '4', '5', name='popularity'), nullable=False)
     dialogue = Column(String, nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
     user_uploaded_id = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -60,7 +64,7 @@ class Template(Base):
         return f"Template(id={self.id}, movie_id={self.movie_id}, actor_id={self.actor_id})"
 
 # Database setup
-engine = create_engine("sqlite:///./mydatabase.db", echo=True)
+engine = create_engine(os.environ["POSTGRES_URL"], echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():

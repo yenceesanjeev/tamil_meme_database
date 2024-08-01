@@ -1,0 +1,13 @@
+__pycache__
+.env
+.vscode
+.idea
+.DS_Store
+.vscode
+.vscode
+.vscode
+.vscode
+.vscode
+.vscode
+venv
+mydatabase.db
