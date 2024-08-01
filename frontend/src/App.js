@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
+const apiUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://tamil-meme-database.onrender.com"
+    : "http://localhost:8000";
+
 function App() {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({
@@ -14,18 +19,23 @@ function App() {
   }, []);
 
   const fetchUsers = async () => {
-    const response = await fetch("http://localhost:8000/users");
+    const response = await fetch(
+      "https://tamil-meme-database.onrender.com/users"
+    );
     const data = await response.json();
     setUsers(data);
   };
 
   const addUser = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/add_user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newUser),
-    });
+    const response = await fetch(
+      "https://tamil-meme-database.onrender.com/add_user",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      }
+    );
     if (response.ok) {
       setNewUser({ name: "", email: "", profile_pic: "" });
       fetchUsers();
@@ -33,9 +43,12 @@ function App() {
   };
 
   const deleteUser = async (userId) => {
-    const response = await fetch(`http://localhost:8000/users/${userId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `https://tamil-meme-database.onrender.com/users/${userId}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (response.ok) {
       fetchUsers();
     }
