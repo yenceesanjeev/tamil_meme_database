@@ -1,13 +1,21 @@
-import React from "react";
-import Header from "../components/Header";
-import MemeUploader from "../components/MemeUploader";
-import UserList from "../components/UserList";
+import NavBar from "@/components/NavBar";
+import MemeGallery from "@/components/MemeGallery";
+import Footer from "@/components/Footer";
+import SearchBar from "@/components/SearchBar";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
-    <div>
-      <Header />
-      <UserList />
-    </div>
+    <main className="min-h-screen bg-white pb-16">
+      <div className="mx-2">
+        <NavBar />
+        <div className="mx-6 px-4 my-6">
+          <Header />
+          <SearchBar />
+          <MemeGallery />
+        </div>
+        <Footer />
+      </div>
+    </main>
   );
 }
