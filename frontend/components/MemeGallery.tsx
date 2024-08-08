@@ -6,10 +6,10 @@ const MemeGallery = () => {
   const [memes, setMemes] = useState([]);
 
   useEffect(() => {
-    const apiUrl = "const apiUrl =
+    const apiUrl =
       process.env.NODE_ENV === "production"
         ? "https://tamil-meme-database.onrender.com"
-        : "http://localhost:8000";";
+        : "http://localhost:8000";
     fetch(apiUrl + "/memes")
       .then((response) => response.json())
       .then((data) => setMemes(data));
