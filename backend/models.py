@@ -7,6 +7,15 @@ load_dotenv()
 
 Base = declarative_base()
 
+class TempMeme(Base):
+    __tablename__ = 'temp_meme_templates'  # Assuming timestamp is stored as a string
+    id = Column(Integer, primary_key=True)
+    image_url = Column(String, nullable=False)
+    meme_name = Column(String)
+
+    def __repr__(self):
+        return f"TempMeme(id={self.id}, image_url='{self.image_url}', meme_name='{self.meme_name}')"
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)

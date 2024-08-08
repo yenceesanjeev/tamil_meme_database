@@ -1,12 +1,31 @@
+"use client";
+
 import React from "react";
+import {
+  Command,
+  CommandInput,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { BellIcon } from "lucide-react";
+import { useState } from "react";
+import AddMeme from "./AddMeme";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-center">
-      <h3 className="text-[20px] sm:text-3xl mb-2">
-        {" "}
-        The best Tamil Meme DB out there{" "}
-      </h3>
+    <div className="flex gap-4 p-4 border-b justify-between items-center">
+      <h1 className="text-xl"> Tamil Meme Database </h1>
+      <AddMeme />
     </div>
   );
 };

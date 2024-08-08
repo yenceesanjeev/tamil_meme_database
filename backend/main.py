@@ -4,7 +4,7 @@ from models import *
 from typing import Optional
 from fastapi import HTTPException
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -85,6 +85,46 @@ def delete_user(user_id: int):
     finally:
         session.close()
 
+@app.get("/memes")
+def get_memes():
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    memes = session.query(TempMeme).all()
+    memes = [meme.image_url for meme in memes]
+
+    return memes
+
+    session.close()
+
+class MemeCreate(BaseModel):
+    image_url: str
+    meme_name: str | None = None
+
+class MemeResponse(BaseModel):
+    id: int
+    image_url: str
+    meme_name: str | None
+
+    model_config = ConfigDict(from_attributes=True)
+
+@app.post("/add-memes")
+def add_meme(meme: MemeCreate):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    try:
+        new_meme = TempMeme(image_url=meme.image_url, meme_name=meme.meme_name)
+        session.add(new_meme)
+        session.commit()
+        session.refresh(new_meme)
+        return MemeResponse.from_orm(new_meme)
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        session.close()
+    
 '''
 @app.get("/users")
 def get_users():

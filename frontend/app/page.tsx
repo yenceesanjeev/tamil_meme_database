@@ -8,9 +8,8 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white pb-16">
       <div className="mx-2">
-        <NavBar />
+        <Header />
         <div className="mx-6 px-4 my-6">
-          <Header />
           <SearchBar />
           <MemeGallery />
         </div>

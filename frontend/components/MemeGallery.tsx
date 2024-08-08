@@ -1,30 +1,38 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-const images = [
-  "https://picsum.photos/200/300",
-  "https://picsum.photos/200/300",
-  "https://picsum.photos/200/300",
-  "https://picsum.photos/200/300",
-  "https://picsum.photos/200/300",
-  "https://picsum.photos/200/300",
-];
-
 const MemeGallery = () => {
+  const [memes, setMemes] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/memes")
+      .then((response) => response.json())
+      .then((data) => setMemes(data));
+  }, []);
+
+  console.log(memes);
+
+  const images = [
+    "https://picsum.photos/200/300",
+    "https://picsum.photos/200/300",
+    "https://picsum.photos/200/300",
+    "https://picsum.photos/200/300",
+    "https://picsum.photos/200/300",
+    "https://picsum.photos/200/300",
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-      {images.map((image, index) => (
-        <div className="bg-gray-200 rounded-md p-4" key={index}>
-          <Image
-            src={image}
-            alt="Meme"
-            width={500}
-            height={500}
-            className="rounded-md"
-          />
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 p-4 md:p-6">
+      {memes.map((memes, index) => (
+        <div
+          className="justify-center items-center group relative overflow-hidden rounded-lg"
+          key={index}
+        >
+          <Image src={memes} alt="Meme" width={200} height={200} />
         </div>
       ))}
-    </div>
+    </section>
   );
 };
 
