@@ -16,7 +16,7 @@ const AddMeme = () => {
   const handleAddMeme = async () => {
     const apiUrl =
       process.env.NODE_ENV === "production"
-        ? "https://saastoolspro-backend.onrender.com"
+        ? "https://tamil-meme-database.onrender.com"
         : "http://localhost:8000";
     const response = await fetch(`${apiUrl}/add-memes`, {
       method: "POST",
